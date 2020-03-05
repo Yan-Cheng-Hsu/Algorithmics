@@ -1,13 +1,13 @@
-#include<stdio.h>
+#include<cstdio>
 #include<iostream>
 //#include<algorithm>
-#include<math.h>
-#include<vector.h>
+#include<cmath>
+#include<vector>
 using namespace std;
 
 //PROBLEM:
 /*
-Write a program to detect an integer n (n > 2) if n is a prime.
+Write a program to determine whether an integer n (n > 2) is a prime.
 
 if (n is a prime)
     return true;
@@ -16,14 +16,20 @@ else
 
 */
 
-class BigNumber
-{
-    public:
-        BigNumber(string Input)
-        {
-            vector<int> Bignum;
-        }
-};
+
+
+/*
+
+Pseudo code for Solution to Prime Detection
+
+Input: an arbitrary integer n (n > 2) 
+Output: true or false
+
+
+
+
+
+*/
 
 
 class Solution
@@ -34,20 +40,20 @@ class Solution
 
 bool Solution::PrimeDetection( int n )
 {
-    int Length = int( ceil( sqrt(n/2) )+2) ;
+    int Length = int( ceil( sqrt( float(n/2) ) )+2) ;
 
-    bool prime[n];
+    bool numList[n];
     for(int i=0;i<Length;i++)
-        prime[i] = true;
+        numList[i] = true;
     
     for(int j=2;j<Length;j++)
     {
-        if( prime[j] )
+        if( numList[j] )
         {
             if( (n%j) != 0 )
             {
                 for(int k=j;k<Length;k=k+j)
-                    prime[k] = false;
+                    numList[k] = false;
             }
             else return false;
         }
@@ -70,16 +76,12 @@ void test()
         cout<<" n is not a prime. "<<endl;
 }
 
-void test2()
-{
-
-}
 
 
 int main(void)
 {
 
-    //test(); 
+    test(); 
     system( "pause" );
     return 0;
 }
