@@ -1,7 +1,9 @@
 #include<stdio.h>
 #include<iostream>
-#include<algorithm>
-
+//#include<algorithm>
+#include<math.h>
+#include<vector.h>
+using namespace std;
 
 //PROBLEM:
 /*
@@ -14,6 +16,15 @@ else
 
 */
 
+class BigNumber
+{
+    public:
+        BigNumber(string Input)
+        {
+            vector<int> Bignum;
+        }
+};
+
 
 class Solution
 {
@@ -21,18 +32,56 @@ class Solution
         bool PrimeDetection( int n );
 };
 
-bool Solution::PrimeDetection( int n );
+bool Solution::PrimeDetection( int n )
+{
+    int Length = int( ceil( sqrt(n/2) )+2) ;
+
+    bool prime[n];
+    for(int i=0;i<Length;i++)
+        prime[i] = true;
+    
+    for(int j=2;j<Length;j++)
+    {
+        if( prime[j] )
+        {
+            if( (n%j) != 0 )
+            {
+                for(int k=j;k<Length;k=k+j)
+                    prime[k] = false;
+            }
+            else return false;
+        }
+    }
+
+    return true;
+
+}
+
+
+void test()
+{
+    cout<< "plz input a number: ";
+    int n;
+    cin>>n;
+    Solution S;
+    if( S.PrimeDetection( n ) )
+        cout<<"n is a prime."<<endl;
+    else
+        cout<<" n is not a prime. "<<endl;
+}
+
+void test2()
 {
 
 }
 
 
-void main(void)
+int main(void)
 {
 
-
+    //test(); 
     system( "pause" );
-    return;
+    return 0;
 }
 
 
