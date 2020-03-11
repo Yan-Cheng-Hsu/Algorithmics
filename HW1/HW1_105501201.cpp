@@ -100,53 +100,79 @@ void Solution::HW1_OddSumwithoutPrime()
 
 void Solution::HW1_PrimeFactorization()
 {
-    vector<int> PrimeFactorList;
-
     int n;
-    cin>>n;
-    int num = n;
-    
-    int i = 2;
-    while( num > 1 )
-    {
-        while( (num%i) == 0 )
+    cin>>n;    
+
+
+        vector<int> PrimeFactorList;
+        int num = n;
+        
+        int i = 2;
+        while( num > 1 )
         {
-            if( isPrime(i) )
+            while( (num%i) == 0 )
             {
+                //cout<<i<<endl;
                 PrimeFactorList.push_back(i);
                 num = num / i;
             }
+            i++;
         }
-        i++;
-    }
 
 
-    //print out the results
-    cout<<n<<"=";
-    int counter = 1;
-    for(int i=1;i<PrimeFactorList.size();i++)
-    {
-        if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
-        {
-            counter++;
-            cout<<PrimeFactorList[i-1]<<"^"<<counter;
-        }
-        else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
-        {
-            counter++;
-        }
-        else if( (PrimeFactorList[i] != PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
-        {
-            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
-            counter = 1;
-            cout<<PrimeFactorList[i]<<"^"<<counter;
-        }
+        ////print out the results
+        cout<<n<<"=";
+        /*for(int i=0;i<PrimeFactorList.size();i++)
+        {   
+            if( i != ( PrimeFactorList.size() - 1 )  )
+                cout<<PrimeFactorList[i]<<" ";
+            else
+                cout<<PrimeFactorList[i];
+            
+        }*/
+        
+        int counter = 1;
+
+        if( PrimeFactorList.size() == 1 )
+            cout<<PrimeFactorList[0]<<endl;
         else
         {
-            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
-            counter = 1;
+
+            for(int i=1;i<PrimeFactorList.size();i++)
+            {
+                if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+                {
+                    counter++;
+                    cout<<PrimeFactorList[i-1]<<"^"<<counter;
+                }
+                else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
+                {
+                    counter++;
+                }
+                else if( (PrimeFactorList[i] != PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+                {
+                    if( counter > 1 )
+                        cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
+                    else 
+                        cout<<PrimeFactorList[i-1]<<"*";
+                    counter = 1;
+                    cout<<PrimeFactorList[i];
+                }
+                else
+                {
+                    if ( counter > 1 )
+                        cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
+                    else 
+                        cout<<PrimeFactorList[i-1]<<"*";
+                    counter = 1;
+                }
+            }
+
         }
-    }
+        //cout<<endl;
+    
+    
+
         
 
     return;
@@ -160,8 +186,8 @@ bool isPrime( int n )
 {
     if( n<2 ) return false;
 
-    int Length = int( floor( sqrt( float(n) ) )+1);
-    for(int i=2;i<Length;i++ )
+    //int Length = int( floor( sqrt( float(n) ) )+1);
+    for(int i=2;i<n;i++ )
     {
         if( ( n%i ) == 0  )
             return false; 
@@ -199,7 +225,10 @@ void test3()
 int main(void)
 {
 
-
+    
+    test1();
+    test2();
+    test3();
     system( "pause" );
     return 0;
 }
