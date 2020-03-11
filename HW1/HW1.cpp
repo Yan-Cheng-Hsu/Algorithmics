@@ -1,258 +1,263 @@
-#include<cstdio>
 #include<iostream>
-#include<algorithm>
 #include<cmath>
+#include<algorithm>
+#include<stdio.h>
 #include<vector>
 using namespace std;
+//=================Functions Declaration============================================================//
+bool isPrime( int n );//Prime Detection
+void test1();//test for HW1: Above Average
+void test2();//test for HW1: Odd Sum without Prime
+void test3();//test for HW1: Prime Factorization
 
-//PROBLEM:
-/*
-Write a program to determine whether an integer n (n > 2) is a prime.
-
-if (n is a prime)
-    return true;
-else 
-    return false;
-
-*/
-
-
-
-/*
-
-Pseudo code for Solution to Prime Detection
-
-Input: an arbitrary integer n (n > 2) 
-Output: true or false
-
-
-
-
-
-*/
-
-
-class SolutionforHW1
+//================the Declaration of Term and PrimeFactor================================//
+class PrimeFactor;
+class Term
 {
-    public:
-        SolutionforHW1( int n = 0 )
-        {
-            this -> n = n;
-            this -> LengthofnumList = int( ceil( sqrt( float(n) ) )+1);
-            this -> primeList = new bool[LengthofnumList];
-        }
-        bool A_PrimeDetection();
-        int B_ReturnLargestFactor();
-        int C_SumofFactor();
-        vector<int> D_HW1(int m);
-        bool E_isPerfectNumber();
-        bool F_isHappyNumber();
-    private:
-        int n;
-        int LengthofnumList;
-        bool *primeList;//to record which numbers (less than n) are factors of n 
-        vector<int> factorList;//the factor list counts n itself as a factor of n
+	friend class PrimeFactor;
+	public:
+		Term( int coef = 0, int exp = 0, Term *link = 0 )
+		{
+			this -> coef = coef;
+			this -> exp = exp;
+			this -> link = link; 
+		}
+	public:
+		int coef;
+		int exp;
+		Term *link;	
 };
 
-bool SolutionforHW1::A_PrimeDetection()
+class PrimeFactor
 {
-    
-    for(int i=0;i<( this -> LengthofnumList );i++)
-    {
-        if( i == 0 ) 
-            this -> primeList[i] = false;
-        else 
-            this -> primeList[i] = true;
-    }
-    
-    for(int j=2;j<( this -> LengthofnumList );j++)
-    {
-        if( this -> primeList[j] )
-        {
-            if( (n%j) != 0 )
-            {
-                for(int k=j;k<( this -> LengthofnumList );k=k+j)
-                    this -> primeList[k] = false;
-            }
-        }
-    }
-    
-
-    int counter = 0;
-    for(int i=0;i<( this -> LengthofnumList );i++)
-    {
-        if(primeList[i])
-            counter++;
-    }
-
-    if( counter == 1)
-        return true;
-    else
-        return false;
-
-}
-
-int SolutionforHW1::B_ReturnLargestFactor()
-{
-    int iterator = 0;
-    int SecondLargestfactor = 1;
-
-    for(int i=0;i<( this -> LengthofnumList );i++)
-    {
-        if( this -> primeList[i] )
-        {
-            
-            //n included
-            if( i != ( (this -> n)/i) )
-            {
-                this -> factorList.push_back( i );
-                this -> factorList.push_back( (this -> n) / i );
-            }
-            else //make sure if i is a squre number, we won't push back it twice.
-            {
-                this -> factorList.push_back( i );
-            }
-
-            if( iterator == 1 )
-                SecondLargestfactor = (this -> n) / i;
-
-            iterator++;
-        }
-    }
-
-    sort( this -> factorList.begin() , this -> factorList.end() ); 
-
-
-
-    for(int i=0;i<( this -> factorList.size() );i++)
-    {  
-        if( factorList[i] == factorList[i-1] )
-            factorList.erase( factorList.begin() + i );
-    }
-
-
-
-
-    return SecondLargestfactor;
-}
-
-
-int SolutionforHW1::C_SumofFactor()
-{   
-    int sum = 0;
-
-    for(int i=0;i<( this -> factorList.size()-1 );i++)
-    {
-        cout<<this -> factorList[i]<<"  ";
-        sum = sum + factorList[i];
-    }    
-    return sum;
-}
-
-
-
-vector<int> SolutionforHW1::D_HW1(int m)
-{
-    vector<int> temp;
-    for(int i=0;i<( this -> factorList.size() );i++ )
-    {
-        if( (this -> factorList[i] < n) && (this -> factorList[i] > m) )
-            temp.push_back( this -> factorList[i] );
-    }
-
-    if( temp.empty() )
-        temp.push_back(0);
-    
-    return temp;
-
-}
-
-
-bool SolutionforHW1::E_isPerfectNumber()
-{
-    if( (this -> n ) == (this -> C_SumofFactor()) )
-        return true;
-    else 
-        return false;
-}
-
-
-bool SolutionforHW1::F_isHappyNumber()
-{
-	if (n <= 0)
-        return false;
-    int temp1 = this -> n;
-
-	while (1)
-	{
-		int temp = 0;
-		while (temp1 > 0)
+	friend ostream &operator<<(ostream &output, const PrimeFactor &new_one);
+	public:
+		PrimeFactor( Term *Head = NULL , Term *Rear = NULL )
 		{
-			temp = temp + int( pow( double(temp1 % 10) , 2.0) );
-			temp1 = temp1 / 10;
+			this-> Head = Head;
+			this-> Rear = Rear;
 		}
-		if (temp == 1)return true;
-		if (temp == 4)return false;
-		if (temp == 16)return false;
-		if (temp == 37)return false;
-		if (temp == 58)return false;
-		if (temp == 89)return false;
-		if (temp == 145)return false;
-		if (temp == 42)return false;
-		if (temp == 20)return false;
-		temp1 = temp;
-	}
-	
+		void Addnode(int coef, int exp);
+    public:
+        Term *Head;
+        Term *Rear;
+};
 
+//================the Declaration of Solution================================//
+class Solution
+{
+    public:
+        void HW1_AboveAverage();
+        vector<int> HW1_OddSumwithoutPrime();
+        vector<int> HW1_PrimeFactorization();
+};
+
+
+
+
+//================function Calls of Term and PrimeFactor================================//
+void PrimeFactor::Addnode(int coef, int exp)
+{
+	
+	if( coef == 0 )
+		return;
+	else
+	{
+		if( Head )
+		{
+			Term *new_term=new Term( coef , exp );
+			Rear -> link = new_term;
+			new_term -> link = NULL;
+			Rear = new_term;
+		}
+		else
+		{
+			Term *new_term = new Term( coef , exp );
+			new_term -> link = NULL;
+			Head = Rear = new_term;
+		}
+	}
+    return;
 }
 
 
-
-void test()
+ostream &operator<<( ostream &output, PrimeFactor &new_one )
 {
-    cout<< "plz input a number: ";
+    Term *current = new_one.Head;
+    while( current != 0)
+    {
+        if( ( current->link ) != 0 )
+            output<< ( current-> coef ) << "^" << ( current -> exp ) << "*";
+        else 
+            output<< ( current-> coef ) << "^" << ( current -> exp );
+        current = current -> link;
+    }
+    return output;
+}
+
+
+//================function Calls of Solution================================//
+
+void Solution::HW1_AboveAverage()
+{
+    return;
+}
+
+vector<int> Solution::HW1_OddSumwithoutPrime()
+{  
+    vector<int> sumList;
+    int maxLoop;
+    cin>>maxLoop;
+
+    for(int i=0;i<maxLoop;i++)
+    {
+        int Floor;
+        cin>>Floor;
+        int Ceil;
+        cin>>Ceil;
+        
+        if( ( Floor%2 ) == 0 )
+            Floor = Floor + 1;
+        
+        int sum = 0;
+
+        for(int i=Floor;i<=Ceil;i=i+2)
+        {
+            if( !( isPrime(i) ) )
+                sum = sum + i;
+        }
+
+        sumList.push_back( sum );
+
+    }
+
+    return sumList;
+
+}
+
+vector<int> Solution::HW1_PrimeFactorization()
+{
+    vector<int> PrimeFactorList;
+
     int n;
     cin>>n;
-    SolutionforHW1 S(n);
-    if( S.A_PrimeDetection() )
-        cout<<"n is a prime."<<endl;
-    else
-        cout<<"n is not a prime. "<<endl;
-    cout<<"the 2end largest factor of "<<n<<" is "<<S.B_ReturnLargestFactor()<<endl;
-    cout<<"the sum of the factors ( other than n itself ) is " <<S.C_SumofFactor()<<endl;
-
-    cout<<"plz input the lower bound m: ";
-    int m;
-    cin>>m;
-    vector<int> temp;
-    temp = S.D_HW1(m);
-    cout<<"the factors of n, which are larger than "<<m<<" but smaller than "<<n<<" are:";
-    for( int i=0;i<temp.size();i++ )
-        cout<<temp[i]<<" ";
-    cout<<endl;
-
-
-    if( S.E_isPerfectNumber() )
-        cout<<"n is a perfect number."<<endl;
-    else 
-        cout<<"n is not a perfect number."<<endl;
+    int num = n;
     
-    if( S.F_isHappyNumber() )
-        cout<<"n is a Happy Number."<<endl;
-    else
-        cout<<"n is not a Hpper NUmber."<<endl;
+    int i = 2;
+    while( num > 1 )
+    {
+        while( (num%i) == 0 )
+        {
+            if( isPrime(i) )
+            {
+                PrimeFactorList.push_back(i);
+                num = num / i;
+            }
+        }
+        i++;
+    }
+
+    /*PrimeFactor Output;
+    int counter = 1;
+    for(int i=1; i<PrimeFactorList.size();i++)
+    {
+        if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+        {
+            counter++;
+            Output.Addnode( PrimeFactorList[i-1] , counter );
+        }
+        else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
+            counter++;
+        else
+        {
+            Output.Addnode( PrimeFactorList[i-1] , counter );
+            counter = 1;
+        }
+    }*/
 
 
+
+    return PrimeFactorList;
 }
+
+
+
+
+//=================Function Call====================================================================//
+bool isPrime( int n )
+{
+    if( n<2 ) return false;
+
+    int Length = int( floor( sqrt( float(n) ) )+1);
+    for(int i=2;i<Length;i++ )
+    {
+        if( ( n%i ) == 0  )
+            return false; 
+    }
+
+    return true;
+}
+
+void test2()
+{
+
+    Solution S;
+    vector<int> sumList;
+    sumList = S.HW1_OddSumwithoutPrime();
+    
+    for(int i=0;i<sumList.size();i++)
+        cout<<sumList[i]<<endl;
+
+
+    return;
+}
+
+void test3()
+{
+    Solution S;
+    vector<int> PrimeFactorList;
+    PrimeFactorList = S.HW1_PrimeFactorization();
+    int counter = 1;
+    for(int i=1;i<PrimeFactorList.size();i++)
+    {
+        if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+        {
+            counter++;
+            cout<<PrimeFactorList[i-1]<<"^"<<counter;
+        }
+        else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
+        {
+            counter++;
+        }
+        else if( (PrimeFactorList[i] != PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+        {
+            cout<<PrimeFactorList[i-1]<<"^"<<counter;
+            counter = 1;
+        }
+        else
+        {
+            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
+            counter = 1;
+        }
+        
+        
+
+    }
+    /*for(int i=0;i<PrimeFactorList.size();i++)
+        cout<< PrimeFactorList[i]<<" ";
+    cout<<endl;*/
+
+    return;
+}
+
+
 
 
 
 int main(void)
 {
 
-    test(); 
+    test3();
     system( "pause" );
     return 0;
 }
-
-
