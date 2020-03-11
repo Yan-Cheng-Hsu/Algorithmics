@@ -1,4 +1,5 @@
 #include<iostream>
+#include<iomanip>
 #include<cmath>
 #include<algorithm>
 #include<stdio.h>
@@ -10,100 +11,58 @@ void test1();//test for HW1: Above Average
 void test2();//test for HW1: Odd Sum without Prime
 void test3();//test for HW1: Prime Factorization
 
-//================the Declaration of Term and PrimeFactor================================//
-class PrimeFactor;
-class Term
-{
-	friend class PrimeFactor;
-	public:
-		Term( int coef = 0, int exp = 0, Term *link = 0 )
-		{
-			this -> coef = coef;
-			this -> exp = exp;
-			this -> link = link; 
-		}
-	public:
-		int coef;
-		int exp;
-		Term *link;	
-};
-
-class PrimeFactor
-{
-	friend ostream &operator<<(ostream &output, const PrimeFactor &new_one);
-	public:
-		PrimeFactor( Term *Head = NULL , Term *Rear = NULL )
-		{
-			this-> Head = Head;
-			this-> Rear = Rear;
-		}
-		void Addnode(int coef, int exp);
-    public:
-        Term *Head;
-        Term *Rear;
-};
-
 //================the Declaration of Solution================================//
 class Solution
 {
     public:
         void HW1_AboveAverage();
-        vector<int> HW1_OddSumwithoutPrime();
-        vector<int> HW1_PrimeFactorization();
+        void HW1_OddSumwithoutPrime();
+        void HW1_PrimeFactorization();
 };
-
-
-
-
-//================function Calls of Term and PrimeFactor================================//
-void PrimeFactor::Addnode(int coef, int exp)
-{
-	
-	if( coef == 0 )
-		return;
-	else
-	{
-		if( Head )
-		{
-			Term *new_term=new Term( coef , exp );
-			Rear -> link = new_term;
-			new_term -> link = NULL;
-			Rear = new_term;
-		}
-		else
-		{
-			Term *new_term = new Term( coef , exp );
-			new_term -> link = NULL;
-			Head = Rear = new_term;
-		}
-	}
-    return;
-}
-
-
-ostream &operator<<( ostream &output, PrimeFactor &new_one )
-{
-    Term *current = new_one.Head;
-    while( current != 0)
-    {
-        if( ( current->link ) != 0 )
-            output<< ( current-> coef ) << "^" << ( current -> exp ) << "*";
-        else 
-            output<< ( current-> coef ) << "^" << ( current -> exp );
-        current = current -> link;
-    }
-    return output;
-}
-
 
 //================function Calls of Solution================================//
 
 void Solution::HW1_AboveAverage()
 {
+    
+    int maxLoop;
+    cin>>maxLoop;
+    double *PercentageList = new double[maxLoop];
+    for(int i=0;i<maxLoop;i++)
+    {
+        double NumofStu;
+        cin>>NumofStu;
+        double *ScoreList = new double[int(NumofStu)];
+        double sum = 0.0;
+        for(int j=0;j<int(NumofStu);j++)
+        {
+            double score;
+            cin>>score;
+            ScoreList[j] = score;
+            sum = sum + score;
+        }
+        
+        
+        double AvgScore = sum / NumofStu;
+        double AboveAvg = 0.0;
+    
+        for(int k=0;k<int(NumofStu);k++)
+        {
+            if( ScoreList[k] >  AvgScore )
+                AboveAvg = AboveAvg + 1.0;
+        }
+
+        PercentageList[i] =  AboveAvg * 100 / NumofStu;
+    }
+
+    for(int x=0;x<maxLoop;x++)
+        cout << fixed << setprecision(3) << PercentageList[x] << "%" <<endl;
+
+
     return;
 }
 
-vector<int> Solution::HW1_OddSumwithoutPrime()
+void Solution::HW1_OddSumwithoutPrime()
 {  
     vector<int> sumList;
     int maxLoop;
@@ -131,11 +90,15 @@ vector<int> Solution::HW1_OddSumwithoutPrime()
 
     }
 
-    return sumList;
+    for(int i=0;i<sumList.size();i++)
+        cout<<sumList[i]<<endl;
 
+
+
+    return;
 }
 
-vector<int> Solution::HW1_PrimeFactorization()
+void Solution::HW1_PrimeFactorization()
 {
     vector<int> PrimeFactorList;
 
@@ -157,27 +120,36 @@ vector<int> Solution::HW1_PrimeFactorization()
         i++;
     }
 
-    /*PrimeFactor Output;
+
+    //print out the results
+    cout<<n<<"=";
     int counter = 1;
-    for(int i=1; i<PrimeFactorList.size();i++)
+    for(int i=1;i<PrimeFactorList.size();i++)
     {
         if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
         {
             counter++;
-            Output.Addnode( PrimeFactorList[i-1] , counter );
+            cout<<PrimeFactorList[i-1]<<"^"<<counter;
         }
         else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
+        {
             counter++;
+        }
+        else if( (PrimeFactorList[i] != PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
+        {
+            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
+            counter = 1;
+            cout<<PrimeFactorList[i]<<"^"<<counter;
+        }
         else
         {
-            Output.Addnode( PrimeFactorList[i-1] , counter );
+            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
             counter = 1;
         }
-    }*/
+    }
+        
 
-
-
-    return PrimeFactorList;
+    return;
 }
 
 
@@ -198,55 +170,25 @@ bool isPrime( int n )
     return true;
 }
 
+
+void test1()
+{
+    Solution S;
+    S.HW1_AboveAverage();
+    return;
+}
+
 void test2()
 {
-
     Solution S;
-    vector<int> sumList;
-    sumList = S.HW1_OddSumwithoutPrime();
-    
-    for(int i=0;i<sumList.size();i++)
-        cout<<sumList[i]<<endl;
-
-
+    S.HW1_OddSumwithoutPrime();
     return;
 }
 
 void test3()
 {
     Solution S;
-    vector<int> PrimeFactorList;
-    PrimeFactorList = S.HW1_PrimeFactorization();
-    int counter = 1;
-    for(int i=1;i<PrimeFactorList.size();i++)
-    {
-        if( (PrimeFactorList[i] == PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
-        {
-            counter++;
-            cout<<PrimeFactorList[i-1]<<"^"<<counter;
-        }
-        else if( PrimeFactorList[i] == PrimeFactorList[i-1] )
-        {
-            counter++;
-        }
-        else if( (PrimeFactorList[i] != PrimeFactorList[i-1]) && (i == PrimeFactorList.size() - 1) )
-        {
-            cout<<PrimeFactorList[i-1]<<"^"<<counter;
-            counter = 1;
-        }
-        else
-        {
-            cout<<PrimeFactorList[i-1]<<"^"<<counter<<"*";
-            counter = 1;
-        }
-        
-        
-
-    }
-    /*for(int i=0;i<PrimeFactorList.size();i++)
-        cout<< PrimeFactorList[i]<<" ";
-    cout<<endl;*/
-
+    S.HW1_PrimeFactorization();
     return;
 }
 
@@ -257,7 +199,7 @@ void test3()
 int main(void)
 {
 
-    test3();
+
     system( "pause" );
     return 0;
 }
