@@ -10,6 +10,7 @@ bool isPrime( int n );//Prime Detection
 void test1();//test for HW1: Above Average
 void test2();//test for HW1: Odd Sum without Prime
 void test3();//test for HW1: Prime Factorization
+void test3_V2();//test for HW1: Prime Factorization Version.2
 
 //================the Declaration of Solution================================//
 class Solution
@@ -18,6 +19,7 @@ class Solution
         void HW1_AboveAverage();
         void HW1_OddSumwithoutPrime();
         void HW1_PrimeFactorization();
+        void HW1_PrimeFactorization_V2();
 };
 
 //================function Calls of Solution================================//
@@ -179,6 +181,68 @@ void Solution::HW1_PrimeFactorization()
 }
 
 
+void Solution::HW1_PrimeFactorization_V2()
+{
+    int n;
+    cin>>n;    
+
+    cout<<n<<"=";
+
+    int num = n;
+    int i = 2;
+    while( num > 1 )
+    {
+        int counter = 0;
+        while(1)
+        {   
+            if( (num%i) != 0 )
+            {   
+                if( counter == 0 )
+                    break;
+                else
+                {
+                    if( num == 1 )
+                    {
+                        if( counter = 1 )
+                        {
+                            cout<<i;
+                            break;
+                        }
+                        else
+                        {
+                            cout<<i<<"^"<<counter;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if( counter == 1)
+                        {
+                            cout<<i<<"*";
+                            break;
+                        }
+                        else
+                        {
+                            cout<<i<<"^"<<counter<<"*";
+                            break;
+                        }
+                    }                    
+                }
+            }
+            else
+            {
+                num = num / i;
+                counter++;
+                continue;
+            }
+            
+        }
+        i++;
+    }
+    
+    return;
+}
+
 
 
 //=================Function Call====================================================================//
@@ -218,7 +282,12 @@ void test3()
     return;
 }
 
-
+void test3_V2()
+{
+    Solution S;
+    S.HW1_PrimeFactorization_V2();
+    return;
+}
 
 
 
@@ -226,9 +295,8 @@ int main(void)
 {
 
     
-    test1();
-    test2();
-    test3();
+    test3_V2();
+
     system( "pause" );
     return 0;
 }
