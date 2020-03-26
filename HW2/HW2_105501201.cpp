@@ -128,6 +128,11 @@ int Euler(int n)
 
 
 
+
+
+
+
+
 void test1()
 {
     Solution S;
